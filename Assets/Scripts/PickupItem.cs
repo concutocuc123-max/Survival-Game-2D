@@ -23,7 +23,6 @@ public class PickupItem : MonoBehaviour
     {
         if (playerTransform == null) return;
 
-        // Tự động hút vào Player khi ở gần (Giống Vampire Survivors)
         float distance = Vector2.Distance(transform.position, playerTransform.position);
         if (distance <= magnetDistance)
         {

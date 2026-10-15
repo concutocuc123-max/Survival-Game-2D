@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public float spawnRadius = 15f; // Quái sinh ra cách xa Player
-    public float spawnRate = 2f;    // Tốc độ sinh quái (con/giây)
+    public float spawnRate = 2f;    // Tốc độ sinh quái 
     private float nextSpawnTime;
 
     void Update()
