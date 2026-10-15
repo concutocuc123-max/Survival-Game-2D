@@ -4,16 +4,13 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public int maxHealth = 100;
-    private int currentHealth;
-    
-    [Header("Settings")]
-    public float damageCooldown = 1f; 
-    private float lastDamageTime;     
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private SpriteRenderer spriteRenderer;
+    
+    [Header("Settings")]
+    public float damageCooldown = 1f;
+    private float lastDamageTime;
 
     public static PlayerController Instance; 
 
@@ -26,8 +23,13 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        currentHealth = maxHealth;
-        lastDamageTime = -damageCooldown; 
+        lastDamageTime = -damageCooldown;
+
+        // Đồng bộ máu ban đầu từ PlayerStats
+        if (PlayerStats.Instance != null)
+        {
+            PlayerStats.Instance.currentHp = PlayerStats.Instance.GetTotalMaxHp();
+        }
     }
 
     void Update()
@@ -41,24 +43,25 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        float moveSpeed = PlayerStats.Instance != null ? PlayerStats.Instance.GetTotalMoveSpeed() : 5f;
         rb.MovePosition(rb.position + moveInput.normalized * moveSpeed * Time.fixedDeltaTime);
     }
 
     public void TakeDamage(int damage)
     {
-        // Kiểm tra xem đã qua thời gian hồi chiêu bất tử chưa
+        if (PlayerStats.Instance == null) return;
+
         if (Time.time < lastDamageTime + damageCooldown) 
         {
             return; 
         }
 
-        // Cập nhật lại thời điểm dính đòn
         lastDamageTime = Time.time;
+
+        PlayerStats.Instance.currentHp -= damage;
+        Debug.Log("Máu còn: " + PlayerStats.Instance.currentHp);
         
-        currentHealth -= damage;
-        Debug.Log("Máu còn: " + currentHealth);
-        
-        if (currentHealth <= 0) 
+        if (PlayerStats.Instance.currentHp <= 0) 
         {
             Die();
         }
