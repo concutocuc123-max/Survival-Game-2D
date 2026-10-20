@@ -108,8 +108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   itemType: 1
   value: 1
-  flySpeed: 8
-  magnetDistance: 4
+  flySpeed: 0
+  magnetDistance: 0
 --- !u!58 &6761224212327609862
 CircleCollider2D:
   m_ObjectHideFlags: 0
